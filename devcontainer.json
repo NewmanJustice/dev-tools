@@ -1,0 +1,74 @@
+{
+  "name": "Full Dev Environment (DIND)",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "runArgs": [
+    // DNS mitigation for intermittent resolver timeouts to api.github.com seen in this container.
+    // If corporate policy blocks public DNS, replace these with your internal DNS servers.
+    "--dns=1.1.1.1",
+    "--dns=8.8.8.8",
+    "--dns-option=timeout:2",
+    "--dns-option=attempts:2",
+    "--dns-option=single-request-reopen"
+  ],
+  "overrideCommand": true,
+  "remoteUser": "vscode",
+
+  "initializeCommand": "touch ~/.bash_history ~/.zsh_history && mkdir -p ~/.azure ~/.kube",
+
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ],
+
+  "features": {
+    // Docker socket access (Docker-outside-of-Docker)
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+
+    // Common CLI tools
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/azure-cli:1": {},
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22.17.1",
+      "nvmInstallPath": "/usr/local/share/nvm"
+    }
+  },
+
+  "containerEnv": {
+    "JAVA_HOME": "/usr/lib/jvm/java-21-openjdk-arm64",
+    "PATH": "/home/vscode/.local/bin:/home/vscode/.bun/bin:/usr/lib/jvm/java-21-openjdk-arm64/bin:${containerEnv:PATH}"
+  },
+
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "postStartCommand": "bash -lc 'echo \"Run: .devcontainer/local-dev-start.sh all\"'",
+
+  "forwardPorts": [3000, 9323],
+  "portsAttributes": {
+    "3000": {
+      "label": "HWF-APP",
+      "onAutoForward": "notify"
+    },
+    "9323": {
+      "label": "Playwright MCP",
+      "onAutoForward": "notify"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "files.autoSave": "onFocusChange"
+      },
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "github.copilot",
+        "ms-playwright.playwright"
+      ]
+    }
+  }
+}
