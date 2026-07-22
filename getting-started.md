@@ -7,3 +7,6 @@ Read `.ai-coding-tools/processes/rules-of-engagement.md` and follow it for the r
 
 ## Step 2 
 Read the repository's `README.md` for project-specific conventions, commands, and constraints.
+
+## Step 3
+Because you are working in a container, your memory will not persist. If you want to remember things in the next session, and a file with a date and time stamp to the directory /dev-tools/memory. Always read the most recent file first, then any subsequent memory files are required. 
