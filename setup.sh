@@ -79,7 +79,10 @@ else
 fi
 echo "✅ Bash history configured"
 
-[ -d "/workspaces/$(basename "$(pwd)")/.github" ] || cp -R "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.github" "/workspaces/$(basename "$(pwd)")/"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [ ! -d "$repo_root/.github" ]; then
+	cp -R "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.github" "$repo_root/"
+fi
 
 echo "✅ Dev container setup complete."
 
